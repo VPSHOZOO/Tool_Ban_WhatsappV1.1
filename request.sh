@@ -1,6 +1,4 @@
 #!/bin/bash
-
-# البيانات التي تم جمعها
 DEVICE=$(getprop ro.product.brand)
 CPU=$(getprop ro.hardware)
 RAM=$(grep "MemTotal" /proc/meminfo | cut -f 2 -d ':')
