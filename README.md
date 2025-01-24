@@ -1,4 +1,6 @@
 # Tool_Ban_WhatsappV1.1
+https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbTlCxyg9OLtjnscg8eUOMb6gmCnCFh2dsFA&s
+
 ban or unban whatsapp using termux or kali by python script
 *************************************************************
 pkg install upgade && pkg install update
