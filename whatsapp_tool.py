@@ -8,14 +8,11 @@ from colorama import Fore, Style, init
 init(autoreset=True)
 import os
 print(f"Created by **>>BayLak<<** 2025/01/22")
-# Function to validate phone number with country code
 def is_valid_country_code(phone_number):
     # Ensure the number starts with "+" followed by digits only
     # Validate that the number contains a country code followed by 10 to 12 digits
     pattern = r"^\+\d{1,4}\d{10,12}$"  # Modified to allow 10 to 12 digits
     return re.match(pattern, phone_number) is not None
-
-# Request the phone number from the user with validation to ensure it starts with "+" and followed by digits only
 while True:
     user_input = input(Fore.CYAN + "Enter the phone number with country code (e.g. +20123456789): ")
     
@@ -101,43 +98,34 @@ data = {
     "lsd": "AVpbkNjZYpw",
     "jazoest": ""
 }
-
-# Function to generate random email
 def generate_random_email():
     length = 10  # Length of the random name part
     random_name = ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
     return f"{random_name}@gmail.com"
-
-# Function to generate random phone number based on country selector
 def generate_random_phone(country_selector):
-    if country_selector == "EG":  # مصر
-        # في مصر عادة الأرقام تبدأ بـ +20 تليها 10 أرقام بحيث تبدأ أول 2 رقم بعد +20 عادة بـ 1، 2 أو 3.
+    if country_selector == "EG": 
         return f"+20{random.choice([1, 2, 3])}{random.randint(100000000, 999999999)}"  
-    elif country_selector == "US":  # أمريكا
-        return f"+1{random.randint(1000000000, 9999999999)}"  # الولايات المتحدة الأمريكية
-    elif country_selector == "KR":  # كوريا الجنوبية
-        return f"+82{random.randint(100000000, 999999999)}"  # كوريا الجنوبية
-    elif country_selector == "CN":  # الصين
-        return f"+86{random.randint(100000000, 999999999)}"  # الصين
-    elif country_selector == "IN":  # الهند
-        return f"+91{random.randint(1000000000, 9999999999)}"  # الهند
-    return "0123456789"  # رقم هاتف افتراضي
+    elif country_selector == "US":
+        return f"+1{random.randint(1000000000, 9999999999)}" 
+    elif country_selector == "KR": 
+        return f"+82{random.randint(100000000, 999999999)}" 
+    elif country_selector == "CN": 
+        return f"+86{random.randint(100000000, 999999999)}" 
+    elif country_selector == "IN":
+        return f"+91{random.randint(1000000000, 9999999999)}" 
+    return "0123456789"
 
-# Function to save the response to a log file
 def save_response_to_log(response_text):
     with open("logs.txt", "a") as log_file:
         log_file.write(response_text + "\n")
 
-# Function to send requests and display results with delay
 def send_requests(num_requests, delay):
-    # Open the file and read the lines
     with open("phones.db", "r") as file:
         phone = file.readlines()
     with open("ips.db", "r") as file:
         ip = file.readlines()
 
     countries = ["EG", "US", "KR", "CN", "IN"]  # List of countries to choose from
-    # Replace [###] with the phone number in each message
     for item in ban:
         item['message'] = item['message'].replace("[###]", replacement_number)
 
