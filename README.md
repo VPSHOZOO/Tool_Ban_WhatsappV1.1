@@ -14,5 +14,3 @@ python main.py if you cant start script
 *** write *whatsapp_ban* start menu again
 *** +201234567890 -- test number
 =========================================================
-Please dont share!! i not need problems
-=========================================================
