@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Ultimate Manager</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+        
+        :root {
+            --primary: #25D366;
+            --primary-dark: #128C7E;
+            --primary-darker: #075E54;
+            --primary-light: #DCF8C6;
+            --accent: #34B7F1;
+            --danger: #FF4D4D;
+            --warning: #FFC107;
+            --success: #4CAF50;
+            --dark: #0F172A;
+            --darker: #020617;
+            --light: #F8FAFC;
+            --gray: #94A3B8;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-glow: 0 0 10px rgba(37, 211, 102, 0.7);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: radial-gradient(circle at center, var(--darker), var(--dark));
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .cyber-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -2;
+            opacity: 0.5;
+        }
+        
+        .cyber-line {
+            position: fixed;
+            height: 100%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--glass-border);
+            position: relative;
+        }
+        
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary), transparent);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+        
+        .logo::before {
+            content: "";
+            position: absolute;
+            left: -15px;
+            top: -15px;
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            border-right-color: transparent;
+            animation: spin 5s linear infinite;
+            opacity: 0.5;
+        }
+        
+        .logo img {
+            width: 50px;
+            height: 50px;
+            filter: drop-shadow(0 0 15px rgba(37, 211, 102, 0.7));
+            z-index: 1;
+        }
+        
+        .logo h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
+            position: relative;
+        }
+        
+        .logo h1::after {
+            content: "PRO";
+            position: absolute;
+            top: -10px;
+            right: -35px;
+            font-size: 0.8rem;
+            background: var(--danger);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        
+        .creator {
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .creator span {
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .datetime {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .datetime .date {
+            font-weight: bold;
+            color: var(--light);
+        }
+        
+        .datetime .time {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        nav {
+            display: flex;
+            gap: 0.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        nav::-webkit-scrollbar {
+            display: none;
+        }
+        
+        nav a {
+            color: var(--gray);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.7rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+        
+        nav a:hover {
+            color: var(--light);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        nav a.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--neon-glow);
+        }
+        
+        nav a.active::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 5px;
+            height: 5px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary);
+        }
+        
+        .main-content {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.2));
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-content::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(37, 211, 102, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+        
+        .section-title {
+            font-size: 1.7rem;
+            margin-bottom: 2rem;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            position: relative;
+        }
+        
+        .section-title::before {
+            content: "";
+            width: 15px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            border-radius: 5px;
+            box-shadow: var(--neon-glow);
+        }
+        
+        .section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, var(--primary), transparent);
+            opacity: 0.3;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            color: var(--light);
+            font-size: 1rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        label::before {
+            content: ">";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.2), var(--neon-glow);
+            background: rgba(0, 0, 0, 0.6);
+        }
+        
+        .input-icon {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 1.2rem 2.8rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #FF2D2D);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 77, 77, 0.5);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning), #FFAB00);
+            color: var(--dark);
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.5);
+        }
+        
+        .status {
+            margin-top: 2.5rem;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 5px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .status::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(37, 211, 102, 0.05), transparent);
+        }
+        
+        .status p {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .status p strong {
+            min-width: 150px;
+            color: var(--gray);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .status-success {
+            color: var(--success);
+            border-left-color: var(--success);
+        }
+        
+        .status-error {
+            color: var(--danger);
+            border-left-color: var(--danger);
+        }
+        
+        .status-warning {
+            color: var(--warning);
+            border-left-color: var(--warning);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: progressShine 2s infinite;
+        }
+        
+        .terminal {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--light);
+            margin-top: 1.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .terminal-line {
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+        
+        .terminal-prompt {
+            color: var(--primary);
+        }
+        
+        .terminal-command {
+            color: var(--accent);
+        }
+        
+        .terminal-response {
+            color: var(--light);
+        }
+        
+        .terminal-error {
+            color: var(--danger);
+        }
+        
+        .terminal-success {
+            color: var(--success);
+        }
+        
+        .api-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .api-link {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-decoration: none;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .api-link:hover {
+            background: rgba(0, 0, 0, 0.5);
+            color: var(--light);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .api-link i {
+            font-size: 1.2rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--glass-border);
+            font-size: 0.9rem;
+            color: var(--gray);
+            position: relative;
+        }
+        
+        footer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--primary), transparent);
+        }
+        
+        .floating-buttons {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 100;
+        }
+        
+        .floating-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .floating-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+        
+        .floating-btn:hover::before {
+            transform: translateX(100%);
+        }
+        
+        .floating-btn.whatsapp {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+        
+        .floating-btn.whatsapp:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.6);
+        }
+        
+        .floating-btn.settings {
+            background: linear-gradient(135deg, var(--accent), #1E88E5);
+        }
+        
+        .floating-btn.settings:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 30px rgba(52, 183, 241, 0.6);
+        }
+        
+        .floating-btn i {
+            font-size: 1.8rem;
+            color: white;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--dark);
+            color: var(--light);
+            text-align: center;
+            border-radius: 6px;
+            padding: 0.5rem;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+            
+            header::after {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 100px;
+            }
+            
+            .logo {
+                justify-content: center;
+            }
+            
+            .logo h1::after {
+                right: auto;
+                left: 100%;
+                top: 0;
+                margin-left: 10px;
+            }
+            
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .main-content {
+                padding: 1.5rem;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .floating-buttons {
+                bottom: 1rem;
+                right: 1rem;
+            }
+            
+            .floating-btn {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .floating-btn i {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Animations */
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fadeIn {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="cyber-grid"></div>
+    <div class="cyber-line"></div>
+    
+    <div class="container">
+        <header class="animate-fadeIn">
+            <div class="logo">
+                <img src="https://i.imgur.com/JQh1k9T.png" alt="WhatsApp Logo">
+                <h1>WhatsApp Ultimate</h1>
+            </div>
+            <div class="creator">
+                <span>BayLak</span>
+                <div class="datetime">
+                    <div class="date" id="currentDate"></div>
+                    <div class="time" id="currentTime"></div>
+                </div>
+            </div>
+        </header>
+        
+        <nav class="animate-fadeIn delay-1">
+            <a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a>
+            <a href="#"><i class="fas fa-ban"></i> Ban Tool</a>
+            <a href="#"><i class="fas fa-unlock"></i> Unban Tool</a>
+            <a href="#"><i class="fas fa-search"></i> Account Checker</a>
+            <a href="#"><i class="fas fa-history"></i> Request Logs</a>
+            <a href="#"><i class="fas fa-chart-line"></i> Analytics</a>
+            <a href="#"><i class="fas fa-cog"></i> Settings</a>
+            <a href="#"><i class="fas fa-question-circle"></i> Help</a>
+        </nav>
+        
+        <div class="main-content animate-fadeIn delay-2">
+            <h2 class="section-title">Advanced Account Control Panel</h2>
+            
+            <div class="form-grid">
+                <div>
+                    <div class="form-group">
+                        <label for="phoneNumber">Target Phone Number</label>
+                        <div class="input-group">
+                            <input type="text" id="phoneNumber" placeholder="+62 [contoh: +6281234567890]" value="+62">
+                            <span class="input-icon"><i class="fas fa-mobile-alt"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="requestCount">Request Intensity</label>
+                        <div class="input-group">
+                            <input type="number" id="requestCount" placeholder="Number of requests" min="1" max="1000" value="25">
+                            <span class="input-icon"><i class="fas fa-bolt"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="delayTime">Delay Between Requests (ms)</label>
+                        <div class="input-group">
+                            <input type="number" id="delayTime" placeholder="Milliseconds between requests" min="100" max="5000" value="500">
+                            <span class="input-icon"><i class="fas fa-clock"></i></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="form-group">
+                        <label for="actionType">Operation Mode</label>
+                        <select id="actionType">
+                            <option value="ban">Ban Account</option>
+                            <option value="unban">Unban Account</option>
+                            <option value="check">Check Status</option>
+                            <option value="spam">Spam Report</option>
+                            <option value="verify">Verify Account</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="proxySettings">Proxy Settings</label>
+                        <select id="proxySettings">
+                            <option value="none">No Proxy</option>
+                            <option value="auto">Auto-Rotate</option>
+                            <option value="custom">Custom Proxy</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customMessage">Custom Message (Optional)</label>
+                        <textarea id="customMessage" rows="2" placeholder="Enter custom report message"></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button class="btn btn-danger" id="banBtn"><i class="fas fa-skull-crossbones"></i> Ban Account</button>
+                <button class="btn btn-primary" id="unbanBtn"><i class="fas fa-shield-alt"></i> Unban Account</button>
+                <button class="btn btn-warning" id="checkBtn"><i class="fas fa-search"></i> Check Status</button>
+                <button class="btn btn-secondary" id="advancedBtn"><i class="fas fa-cogs"></i> Advanced</button>
+            </div>
+            
+            <div class="status" id="statusBox" style="display: none;">
+                <p><strong>STATUS:</strong> <span id="statusText">Ready</span></p>
+                <p><strong>TARGET:</strong> <span id="targetNumber">None</span></p>
+                <p><strong>REQUESTS:</strong> <span id="requestsSent">0</span>/<span id="totalRequests">0</span></p>
+                <p><strong>SUCCESS RATE:</strong> <span id="successRate">0%</span></p>
+                <p><strong>LAST RESPONSE:</strong> <span id="lastResponse">Waiting for action...</span></p>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+            </div>
+            
+            <div class="terminal" id="terminal">
+                <div class="terminal-line">
+                    <span class="terminal-prompt">admin@whatsapp-manager:~$</span> 
+                    <span class="terminal-command">system ready</span>
+                </div>
+                <div class="terminal-line terminal-response">
+                    WhatsApp Ultimate Manager v3.0 initialized
+                </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">admin@whatsapp-manager:~$</span> 
+                    <span class="terminal-command">awaiting command</span>
+                </div>
+            </div>
+            
+            <div class="api-links">
+                <a href="https://www.whatsapp.com/support/" class="api-link" target="_blank">
+                    <i class="fas fa-life-ring"></i> WhatsApp Support
+                </a>
+                <a href="https://graph.facebook.com/v17.0/6288991838060/send" class="api-link" target="_blank">
+                    <i class="fas fa-project-diagram"></i> Graph API
+                </a>
+                <a href="https://developers.facebook.com/docs/facebook-login/guides/access-tokens/get-long-lived" class="api-link" target="_blank">
+                    <i class="fas fa-key"></i> Access Tokens
+                </a>
+                <a href="https://www.whatsapp.com/" class="api-link" target="_blank">
+                    <i class="fab fa-whatsapp"></i> WhatsApp Official
+                </a>
+            </div>
+        </div>
+        
+        <footer class="animate-fadeIn delay-3">
+            <p>This tool is for educational purposes only. Use at your own risk.</p>
+            <p>© 2025 WhatsApp Ultimate Manager | All Rights Reserved | Version 3.0.1</p>
+        </footer>
+    </div>
+    
+    <div class="floating-buttons">
+        <div class="floating-btn whatsapp tooltip">
+            <i class="fab fa-whatsapp"></i>
+            <span class="tooltiptext">Quick Support</span>
+        </div>
+        <div class="floating-btn settings tooltip">
+            <i class="fas fa-cog"></i>
+            <span class="tooltiptext">Quick Settings</span>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const phoneInput = document.getElementById('phoneNumber');
+            const banBtn = document.getElementById('banBtn');
+            const unbanBtn = document.getElementById('unbanBtn');
+            const checkBtn = document.getElementById('checkBtn');
+            const advancedBtn = document.getElementById('advancedBtn');
+            const requestCount = document.getElementById('requestCount');
+            const delayTime = document.getElementById('delayTime');
+            const actionType = document.getElementById('actionType');
+            const proxySettings = document.getElementById('proxySettings');
+            const customMessage = document.getElementById('customMessage');
+            const startBtn = document.getElementById('startBtn');
+            const statusBox = document.getElementById('statusBox');
+            const statusText = document.getElementById('statusText');
+            const targetNumber = document.getElementById('targetNumber');
+            const requestsSent = document.getElementById('requestsSent');
+            const totalRequests = document.getElementById('totalRequests');
+            const successRate = document.getElementById('successRate');
+            const lastResponse = document.getElementById('lastResponse');
+            const progressBar = document.getElementById('progressBar');
+            const terminal = document.getElementById('terminal');
+            const currentDate = document.getElementById('currentDate');
+            const currentTime = document.getElementById('currentTime');
+            
+            // Update date and time
+            function updateDateTime() {
+                const now = new Date();
+                
+                // Format date (Indonesian format: Hari, DD/MM/YYYY)
+                const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                const dayName = days[now.getDay()];
+                const date = now.getDate().toString().padStart(2, '0');
+                const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                const year = now.getFullYear();
+                currentDate.textContent = `${dayName}, ${date}/${month}/${year}`;
+                
+                // Format time (HH:MM:SS)
+                const hours = now.getHours().toString().padStart(2, '0');
+                const minutes = now.getMinutes().toString().padStart(2, '0');
+                const seconds = now.getSeconds().toString().padStart(2, '0');
+                currentTime.textContent = `${hours}:${minutes}:${seconds}`;
+            }
+            
+            // Update time every second
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+            
+            // Process variables
+            let isProcessing = false;
+            let processInterval;
+            let completedRequests = 0;
+            let successfulRequests = 0;
+            let currentTotalRequests = 0;
+            
+            // Action buttons click handlers
+            banBtn.addEventListener('click', function() {
+                actionType.value = 'ban';
+                updateActionUI();
+            });
+            
+            unbanBtn.addEventListener('click', function() {
+                actionType.value = 'unban';
+                updateActionUI();
+            });
+            
+            checkBtn.addEventListener('click', function() {
+                actionType.value = 'check';
+                updateActionUI();
+            });
+            
+            advancedBtn.addEventListener('click', function() {
+                actionType.value = 'custom';
+                updateActionUI();
+                addTerminalLine("Advanced options selected. Configure your custom operation.", "response");
+            });
+            
+            // Update UI based on selected action
+            function updateActionUI() {
+                const action = actionType.value;
+                
+                // Reset all buttons
+                banBtn.classList.remove('btn-danger', 'btn-secondary');
+                unbanBtn.classList.remove('btn-primary', 'btn-secondary');
+                checkBtn.classList.remove('btn-warning', 'btn-secondary');
+                
+                // Set active button
+                if (action === 'ban') {
+                    banBtn.classList.add('btn-danger');
+                    unbanBtn.classList.add('btn-secondary');
+                    checkBtn.classList.add('btn-secondary');
+                } else if (action === 'unban') {
+                    unbanBtn.classList.add('btn-primary');
+                    banBtn.classList.add('btn-secondary');
+                    checkBtn.classList.add('btn-secondary');
+                } else if (action === 'check') {
+                    checkBtn.classList.add('btn-warning');
+                    banBtn.classList.add('btn-secondary');
+                    unbanBtn.classList.add('btn-secondary');
+                }
+                
+                addTerminalLine(`Operation mode changed to: ${action.toUpperCase()}`, "response");
+            }
+            
+            // Start processing
+            function startProcessing() {
+                const phoneNumber = phoneInput.value.trim();
+                const requests = parseInt(requestCount.value);
+                const delay = parseInt(delayTime.value);
+                const action = actionType.value;
+                const proxy = proxySettings.value;
+                const message = customMessage.value;
+                
+                // Validation
+                if (!validatePhoneNumber(phoneNumber)) {
+                    showStatus('Error: Invalid phone number format', 'error');
+                    addTerminalLine("Invalid phone number format. Please use +62xxxxxxxxxx", "error");
+                    return;
+                }
+                
+                if (isNaN(requests) || requests < 1 || requests > 1000) {
+                    showStatus('Error: Invalid number of requests (1-1000)', 'error');
+                    addTerminalLine("Invalid request count. Please enter a value between 1 and 1000", "error");
+                    return;
+                }
+                
+                if (isNaN(delay) || delay < 100 || delay > 5000) {
+                    showStatus('Error: Invalid delay time (100-5000ms)', 'error');
+                    addTerminalLine("Invalid delay time. Please enter a value between 100 and 5000ms", "error");
+                    return;
+                }
+                
+                if (isProcessing) {
+                    showStatus('Process is already running', 'warning');
+                    addTerminalLine("Process already running. Please wait or stop current operation.", "warning");
+                    return;
+                }
+                
+                // Start processing
+                isProcessing = true;
+                currentTotalRequests = requests;
+                completedRequests = 0;
+                successfulRequests = 0;
+                
+                // Update UI
+                statusBox.style.display = 'block';
+                showStatus(`${action === 'ban' ? 'Banning' : action === 'unban' ? 'Unbanning' : 'Checking'} account...`, 'processing');
+                targetNumber.textContent = phoneNumber;
+                requestsSent.textContent = '0';
+                totalRequests.textContent = requests;
+                successRate.textContent = '0%';
+                progressBar.style.width = '0%';
+                
+                // Add to terminal
+                addTerminalLine(`Starting ${action} operation on ${phoneNumber}`, "command");
+                addTerminalLine(`Sending ${requests} requests with ${delay}ms delay`, "response");
+                if (proxy !== 'none') {
+                    addTerminalLine(`Using proxy: ${proxy}`, "response");
+                }
+                if (message) {
+                    addTerminalLine(`Custom message: ${message}`, "response");
+                }
+                
+                // Simulate API requests
+                processInterval = setInterval(() => processRequest(action), delay);
+            }
+            
+            // Process a single request
+            function processRequest(action) {
+                if (completedRequests >= currentTotalRequests) {
+                    finishProcessing();
+                    return;
+                }
+                
+                completedRequests++;
+                const isSuccess = Math.random() > 0.2; // 80% success rate
+                if (isSuccess) successfulRequests++;
+                
+                // Update UI
+                requestsSent.textContent = completedRequests;
+                const progress = (completedRequests / currentTotalRequests) * 100;
+                progressBar.style.width = `${progress}%`;
+                
+                const currentSuccessRate = Math.round((successfulRequests / completedRequests) * 100);
+                successRate.textContent = `${currentSuccessRate}%`;
+                
+                // Generate response based on action
+                const response = generateResponse(action, isSuccess);
+                lastResponse.textContent = response.message;
+                
+                // Add to terminal
+                addTerminalLine(`Request ${completedRequests}/${currentTotalRequests}: ${response.terminalMessage}`, 
+                               isSuccess ? "response" : "error");
+                
+                // Update status color based on success rate
+                if (currentSuccessRate < 50) {
+                    statusText.classList.add('status-warning');
+                    statusText.classList.remove('status-success');
+                } else {
+                    statusText.classList.add('status-success');
+                    statusText.classList.remove('status-warning');
+                }
+                
+                // Finish if completed all requests
+                if (completedRequests >= currentTotalRequests) {
+                    finishProcessing();
+                }
+            }
+            
+            // Generate response message
+            function generateResponse(action, isSuccess) {
+                const responses = {
+                    ban: {
+                        success: [
+                            'Report submitted to WhatsApp',
+                            'Account flagged for review',
+                            'Violation detected - action taken'
+                        ],
+                        error: [
+                            'Failed to submit report',
+                            'Error processing ban request',
+                            'Server rejected the request'
+                        ]
+                    },
+                    unban: {
+                        success: [
+                            'Appeal submitted successfully',
+                            'Account under review',
+                            'Restriction lifted'
+                        ],
+                        error: [
+                            'Failed to submit appeal',
+                            'Error processing unban request',
+                            'Server rejected the appeal'
+                        ]
+                    },
+                    check: {
+                        success: [
+                            'Account status: Active',
+                            'No violations found',
+                            'Account in good standing'
+                        ],
+                        error: [
+                            'Error checking account status',
+                            'Failed to retrieve account info',
+                            'Server timeout'
+                        ]
+                    },
+                    spam: {
+                        success: [
+                            'Spam report submitted',
+                            'Account marked as spam',
+                            'Multiple reports registered'
+                        ],
+                        error: [
+                            'Failed to submit spam report',
+                            'Error processing spam request',
+                            'Server rejected spam report'
+                        ]
+                    },
+                    verify: {
+                        success: [
+                            'Verification request sent',
+                            'Account under verification',
+                            'Verification code generated'
+                        ],
+                        error: [
+                            'Failed to send verification',
+                            'Error processing verify request',
+                            'Server rejected verification'
+                        ]
+                    }
+                };
+                
+                const type = isSuccess ? 'success' : 'error';
+                const messages = responses[action][type];
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                
+                return {
+                    message: isSuccess ? randomMessage : `Error: ${randomMessage}`,
+                    terminalMessage: isSuccess ? randomMessage : `ERROR: ${randomMessage}`
+                };
+            }
+            
+            // Finish processing
+            function finishProcessing() {
+                clearInterval(processInterval);
+                isProcessing = false;
+                
+                const successPercentage = Math.round((successfulRequests / currentTotalRequests) * 100);
+                const action = actionType.value;
+                
+                showStatus(`Process completed`, 'success');
+                lastResponse.textContent = `Finished ${action} operation with ${successPercentage}% success rate`;
+                
+                // Add to terminal
+                addTerminalLine(`Operation completed: ${successPercentage}% success rate`, 
+                               successPercentage > 50 ? "success" : "warning");
+                addTerminalLine("System ready for next operation", "response");
+            }
+            
+            // Validate phone number (specific for Indonesian numbers +62)
+            function validatePhoneNumber(phone) {
+                return phone.startsWith('+62') && phone.length >= 11 && phone.length <= 15 && /^\+62[0-9]+$/.test(phone);
+            }
+            
+            // Show status message
+            function showStatus(message, type) {
+                statusText.textContent = message;
+                statusText.className = '';
+                
+                switch(type) {
+                    case 'error':
+                        statusBox.style.borderLeftColor = 'var(--danger)';
+                        statusText.classList.add('status-error');
+                        break;
+                    case 'success':
+                        statusBox.style.borderLeftColor = 'var(--success)';
+                        statusText.classList.add('status-success');
+                        break;
+                    case 'warning':
+                        statusBox.style.borderLeftColor = 'var(--warning)';
+                        statusText.classList.add('status-warning');
+                        break;
+                    case 'processing':
+                        statusBox.style.borderLeftColor = 'var(--accent)';
+                        break;
+                    default:
+                        statusBox.style.borderLeftColor = 'var(--primary)';
+                }
+            }
+            
+            // Add line to terminal
+            function addTerminalLine(text, type = "response") {
+                const line = document.createElement('div');
+                line.classList.add('terminal-line');
+                
+                if (type === "command") {
+                    const prompt = document.createElement('span');
+                    prompt.classList.add('terminal-prompt');
+                    prompt.textContent = 'admin@whatsapp-manager:~$ ';
+                    
+                    const command = document.createElement('span');
+                    command.classList.add('terminal-command');
+                    command.textContent = text;
+                    
+                    line.appendChild(prompt);
+                    line.appendChild(command);
+                } else {
+                    line.classList.add(`terminal-${type}`);
+                    line.textContent = text;
+                }
+                
+                terminal.appendChild(line);
+                terminal.scrollTop = terminal.scrollHeight;
+                
+                // Limit terminal lines to 100
+                if (terminal.children.length > 100) {
+                    terminal.removeChild(terminal.children[0]);
+                }
+            }
+            
+            // Set up button event listeners
+            banBtn.addEventListener('click', function() {
+                actionType.value = 'ban';
+                updateActionUI();
+                startProcessing();
+            });
+            
+            unbanBtn.addEventListener('click', function() {
+                actionType.value = 'unban';
+                updateActionUI();
+                startProcessing();
+            });
+            
+            checkBtn.addEventListener('click', function() {
+                actionType.value = 'check';
+                updateActionUI();
+                startProcessing();
+            });
+            
+            advancedBtn.addEventListener('click', function() {
+                // In a real app, this would open advanced options modal
+                addTerminalLine("Opening advanced options panel...", "response");
+            });
+            
+            // Floating buttons
+            document.querySelector('.floating-btn.whatsapp').addEventListener('click', function() {
+                addTerminalLine("Opening WhatsApp support...", "response");
+                window.open('https://www.whatsapp.com/support/', '_blank');
+            });
+            
+            document.querySelector('.floating-btn.settings').addEventListener('click', function() {
+                addTerminalLine("Opening settings panel...", "response");
+                // In a real app, this would open settings
+            });
+            
+            // Initial terminal message
+            addTerminalLine("Welcome to WhatsApp Ultimate Manager v3.0", "success");
+            addTerminalLine("System initialized and ready for commands", "response");
+            
+            // Auto-focus phone input
+            phoneInput.focus();
+        });
+    </script>
+</body>
+</html>
