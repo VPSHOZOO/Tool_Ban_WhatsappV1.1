@@ -175,7 +175,7 @@ send_requests() {
         __rev=$((RANDOM % 9000000000 + 1000000000))
         
         # Send request using curl
-        response=$(curl -s -k -X POST "https://www.whatsapp.com/contact/noclient/async/new/" \
+        response=$(curl -s -k -X POST "https://www.whatsapp.com/contact/noclient/" \
             -H "Host: www.whatsapp.com" \
             -H "Cookie: wa_lang_pref=ar; wa_ul=f01bc326-4a06-4e08-82d9-00b74ae8e830; wa_csrf=HVi-YVV_BloLmh-WHL8Ufz" \
             -H "Sec-Ch-Ua-Platform: \"Linux\"" \
